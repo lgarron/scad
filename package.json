@@ -1,4 +1,5 @@
 {
 	"name": "scad",
-	"type": "module"
+	"type": "module",
+	"version": "0.1.0"
 }
