@@ -6,7 +6,7 @@ include <./round_bevel.scad>
 __SMALL_HINGE__THICKNESS = 5;
 __SMALL_HINGE__PLUG_RADIUS = 3.5 / 2;
 __SMALL_HINGE__CLEARANCE = 0.5;
-__SMALL_HINGE__PLUG_CLEARANCE = 0.15;
+__SMALL_HINGE__DEFAULT_PLUG_CLEARANCE = 0.15;
 
 __SMALL_HINGE__HINGE_SHAVE = 0.05;
 __SMALL_HINGE__HINGE_SHAVE_BELOW_GEARS = 0.05;
@@ -82,19 +82,19 @@ module __SMALL_HINGE__plug()
                  r2 = __SMALL_HINGE__PLUG_RADIUS);
 }
 
-module __SMALL_HINGE__port_negative()
+module __SMALL_HINGE__port_negative(plug_clearance_scale)
 {
     translate([ 0, 0, -__SMALL_HINGE__PLUG_LENGTH + __SMALL_HINGE__PLUG_FRUSTRUM_LENGTH ])
         cylinder(h = __SMALL_HINGE__PLUG_LENGTH - __SMALL_HINGE__PLUG_FRUSTRUM_LENGTH +
                      __SMALL_HINGE__PLUG_VERTICAL_CLEARANCE + _EPSILON,
-                 r = __SMALL_HINGE__PLUG_RADIUS + __SMALL_HINGE__PLUG_CLEARANCE);
-    translate([ 0, 0, -__SMALL_HINGE__PLUG_LENGTH ])
-        cylinder(h = __SMALL_HINGE__PLUG_FRUSTRUM_LENGTH,
-                 r1 = __SMALL_HINGE__PLUG_FRUSTRUM_END_RADIUS + __SMALL_HINGE__PLUG_CLEARANCE,
-                 r2 = __SMALL_HINGE__PLUG_RADIUS + __SMALL_HINGE__PLUG_CLEARANCE);
+                 r = __SMALL_HINGE__PLUG_RADIUS + __SMALL_HINGE__DEFAULT_PLUG_CLEARANCE * plug_clearance_scale);
+    translate([ 0, 0, -__SMALL_HINGE__PLUG_LENGTH ]) cylinder(
+        h = __SMALL_HINGE__PLUG_FRUSTRUM_LENGTH,
+        r1 = __SMALL_HINGE__PLUG_FRUSTRUM_END_RADIUS + __SMALL_HINGE__DEFAULT_PLUG_CLEARANCE * plug_clearance_scale,
+        r2 = __SMALL_HINGE__PLUG_RADIUS + __SMALL_HINGE__DEFAULT_PLUG_CLEARANCE * plug_clearance_scale);
 }
 
-module __SMALL_HINGE__half(gear_offset, round_far_side = false)
+module __SMALL_HINGE__half(gear_offset, plug_clearance_scale, round_far_side)
 {
     difference()
     {
@@ -105,7 +105,7 @@ module __SMALL_HINGE__half(gear_offset, round_far_side = false)
                 translate([ 0, 0, 10 ]) mirror([ 0, 0, 1 ])
                     __SMALL_HINGE__outer_hinge(10, gear_offset, false, round_far_side = round_far_side);
                 translate([ __SMALL_HINGE__THICKNESS / 2, __SMALL_HINGE__THICKNESS / 2, 10 ])
-                    __SMALL_HINGE__port_negative();
+                    __SMALL_HINGE__port_negative(plug_clearance_scale = plug_clearance_scale);
             }
 
             difference()
@@ -113,7 +113,7 @@ module __SMALL_HINGE__half(gear_offset, round_far_side = false)
                 translate([ 0, 0, 20 ])
                     __SMALL_HINGE__outer_hinge(10, gear_offset, false, round_far_side = round_far_side);
                 translate([ __SMALL_HINGE__THICKNESS / 2, __SMALL_HINGE__THICKNESS / 2, 20 ]) mirror([ 0, 0, -1 ])
-                    __SMALL_HINGE__port_negative();
+                    __SMALL_HINGE__port_negative(plug_clearance_scale = plug_clearance_scale);
             }
 
             translate([ __SMALL_HINGE__THICKNESS / 2, __SMALL_HINGE__THICKNESS / 2, 10 ]) __SMALL_HINGE__plug();
@@ -136,14 +136,11 @@ module __SMALL_HINGE__half(gear_offset, round_far_side = false)
             __SMALL_HINGE__THICKNESS / 2 + _EPSILON, __SMALL_HINGE__THICKNESS / 2 * 2, 10 - 2 *
             __SMALL_HINGE__PLUG_VERTICAL_CLEARANCE
         ]);
-
-    // translate([ 5 - _EPSILON, 0, 0 ]) cube([ 7.5 + _EPSILON, 5, 5 ]);
-    // translate([ 5 - _EPSILON, 0, 25 ]) cube([ 7.5 + _EPSILON, 5, 5 ]);
-    // translate([ 7.5, 0, 0 ]) cube([ 5, 5, 30 ]);
 }
 
-module small_hinge_30mm(round_far_side = false)
+module small_hinge_30mm(plug_clearance_scale = 1, round_far_side = false)
 {
-    mirror([ 1, 0, 0 ]) __SMALL_HINGE__half(360 / 8 / 2, round_far_side = round_far_side);
-    __SMALL_HINGE__half(0, round_far_side = round_far_side);
+    mirror([ 1, 0, 0 ])
+        __SMALL_HINGE__half(360 / 8 / 2, plug_clearance_scale = plug_clearance_scale, round_far_side = round_far_side);
+    __SMALL_HINGE__half(0, plug_clearance_scale = plug_clearance_scale, round_far_side = round_far_side);
 };
