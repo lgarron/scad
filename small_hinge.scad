@@ -94,13 +94,19 @@ module __SMALL_HINGE__port_negative(plug_clearance_scale)
         r2 = __SMALL_HINGE__PLUG_RADIUS + __SMALL_HINGE__DEFAULT_PLUG_CLEARANCE * plug_clearance_scale);
 }
 
-module __SMALL_HINGE__half(gear_offset, plug_clearance_scale, round_far_side)
+module rotate_angle(angle, offset)
+{
+    translate(-offset) rotate([ 0, 0, -angle ]) translate(offset) children();
+}
+
+module __SMALL_HINGE__half(gear_offset, rotate_angle_each_side, plug_clearance_scale, round_far_side)
 {
     difference()
     {
         union()
         {
-            difference()
+            rotate_angle(rotate_angle_each_side, [ -__SMALL_HINGE__THICKNESS / 2, -__SMALL_HINGE__THICKNESS / 2, 0 ])
+                difference()
             {
                 translate([ 0, 0, 10 ]) mirror([ 0, 0, 1 ])
                     __SMALL_HINGE__outer_hinge(10, gear_offset, false, round_far_side = round_far_side);
@@ -108,7 +114,8 @@ module __SMALL_HINGE__half(gear_offset, plug_clearance_scale, round_far_side)
                     __SMALL_HINGE__port_negative(plug_clearance_scale = plug_clearance_scale);
             }
 
-            difference()
+            rotate_angle(rotate_angle_each_side, [ -__SMALL_HINGE__THICKNESS / 2, -__SMALL_HINGE__THICKNESS / 2, 0 ])
+                difference()
             {
                 translate([ 0, 0, 20 ])
                     __SMALL_HINGE__outer_hinge(10, gear_offset, false, round_far_side = round_far_side);
@@ -138,9 +145,11 @@ module __SMALL_HINGE__half(gear_offset, plug_clearance_scale, round_far_side)
         ]);
 }
 
-module small_hinge_30mm(plug_clearance_scale = 1, round_far_side = false)
+module small_hinge_30mm(rotate_angle_each_side = 0, plug_clearance_scale = 1, round_far_side = false)
 {
     mirror([ 1, 0, 0 ])
-        __SMALL_HINGE__half(360 / 8 / 2, plug_clearance_scale = plug_clearance_scale, round_far_side = round_far_side);
-    __SMALL_HINGE__half(0, plug_clearance_scale = plug_clearance_scale, round_far_side = round_far_side);
+        __SMALL_HINGE__half(360 / 8 / 2, rotate_angle_each_side = rotate_angle_each_side,
+                            plug_clearance_scale = plug_clearance_scale, round_far_side = round_far_side);
+    __SMALL_HINGE__half(0, rotate_angle_each_side = rotate_angle_each_side, plug_clearance_scale = plug_clearance_scale,
+                        round_far_side = round_far_side);
 };
