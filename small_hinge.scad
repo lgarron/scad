@@ -34,8 +34,8 @@ module __SMALL_HINGE__outer_hinge(h, gear_offset, flip_helix, round_far_side = f
             __SMALL_HINGE__CUBE_HINGE_OFFSET_FOR_FULL_TOOTH, __SMALL_HINGE__GEAR_BACK_SPACING - _EPSILON,
             gear_h / 2 + __SMALL_HINGE__GEAR_OFFSET_HEIGHT + _EPSILON / 2
         ]) cube([ __SMALL_HINGE__THICKNESS, __SMALL_HINGE__THICKNESS + _EPSILON, gear_h + _EPSILON ], center = true);
-        translate([ 0, 0, __SMALL_HINGE__GEAR_OFFSET_HEIGHT / 2 - _EPSILON / 2 ]) rotate([ 0, 180, 0 ])
-            round_bevel_complement(__SMALL_HINGE__GEAR_OFFSET_HEIGHT + _EPSILON, __SMALL_HINGE__THICKNESS / 2);
+        translate([ 0, 0, -_EPSILON ])
+            round_bevel_complement(__SMALL_HINGE__GEAR_OFFSET_HEIGHT + _EPSILON * 2, __SMALL_HINGE__THICKNESS / 2);
 
         if (round_far_side)
         {
