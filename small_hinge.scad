@@ -21,8 +21,7 @@ __SMALL_HINGE__PLUG_VERTICAL_CLEARANCE = 0.15;
 __SMALL_HINGE__GEAR_VERTICAL_CLEARANCE = 0.2; // for 0.2mm layer height
 __SMALL_HINGE__GEAR_OFFSET_HEIGHT = __SMALL_HINGE__PLUG_LENGTH - __SMALL_HINGE__PLUG_FRUSTRUM_LENGTH / 2;
 
-module __SMALL_HINGE__outer_hinge(h, gear_offset, flip_helix, round_far_side, main_clearance_scale,
-                                  shave_middle) union()
+module __SMALL_HINGE__outer_hinge_block(h, gear_offset, flip_helix, round_far_side, main_clearance_scale, shave_middle)
 {
     gear_h = h - __SMALL_HINGE__GEAR_OFFSET_HEIGHT;
 
@@ -43,19 +42,27 @@ module __SMALL_HINGE__outer_hinge(h, gear_offset, flip_helix, round_far_side, ma
                 round_bevel_complement(h, __SMALL_HINGE__THICKNESS / 2);
         }
 
-        translate([ -_EPSILON, -_EPSILON, __SMALL_HINGE__GEAR_OFFSET_HEIGHT - _EPSILON ]) cube([
-            _EPSILON + (shave_middle ? __SMALL_HINGE__HINGE_SHAVE : 0), __SMALL_HINGE__THICKNESS + 2 * _EPSILON,
-            gear_h +
-            _EPSILON
-        ]);
-        translate([ -_EPSILON, -_EPSILON, -_EPSILON ]) cube([
-            _EPSILON + (shave_middle ? __SMALL_HINGE__HINGE_SHAVE_BELOW_GEARS : 0),
-            __SMALL_HINGE__THICKNESS + 2 * _EPSILON, __SMALL_HINGE__GEAR_OFFSET_HEIGHT +
-            _EPSILON
-        ]);
+        //     translate([ -_EPSILON, -_EPSILON, __SMALL_HINGE__GEAR_OFFSET_HEIGHT - _EPSILON ]) cube([
+        //         _EPSILON , __SMALL_HINGE__THICKNESS + 2 * _EPSILON,
+        //         gear_h +
+        //         _EPSILON
+        //     ]);
+        //     translate([ -_EPSILON, -_EPSILON, -_EPSILON ]) cube([
+        //         _EPSILON,
+        //         __SMALL_HINGE__THICKNESS + 2 * _EPSILON, __SMALL_HINGE__GEAR_OFFSET_HEIGHT +
+        //         _EPSILON
+        //     ]);
     }
 
-    translate([ 0, 0, __SMALL_HINGE__GEAR_OFFSET_HEIGHT ]) intersection()
+    translate([ __SMALL_HINGE__THICKNESS / 2, __SMALL_HINGE__THICKNESS / 2, __SMALL_HINGE__GEAR_OFFSET_HEIGHT ])
+        cylinder(r = 3.5 / 2, h = gear_h);
+}
+
+module __SMALL_HINGE__outer_hinge_gears(h, gear_offset, flip_helix, round_far_side, main_clearance_scale,
+                                        shave_middle) union() translate([ 0, 0, __SMALL_HINGE__GEAR_OFFSET_HEIGHT ])
+{
+    gear_h = 10 - __SMALL_HINGE__GEAR_OFFSET_HEIGHT;
+    intersection()
     {
         translate([ __SMALL_HINGE__CUBE_HINGE_OFFSET_FOR_FULL_TOOTH, 0, gear_h / 2 ])
             cube([ __SMALL_HINGE__THICKNESS, __SMALL_HINGE__THICKNESS, gear_h ], center = true);
@@ -70,9 +77,6 @@ module __SMALL_HINGE__outer_hinge(h, gear_offset, flip_helix, round_far_side, ma
         // TODO: do this better
         translate([ 0, 0, 0 ]) translate([ 0, 3, 0 ]) cylinder(r = __SMALL_HINGE__THICKNESS / 2 + 1.5, h = gear_h);
     }
-
-    translate([ __SMALL_HINGE__THICKNESS / 2, __SMALL_HINGE__THICKNESS / 2, __SMALL_HINGE__GEAR_OFFSET_HEIGHT ])
-        cylinder(r = 3.5 / 2, h = gear_h);
 }
 
 module __SMALL_HINGE__plug()
@@ -98,37 +102,65 @@ module __SMALL_HINGE__port_negative(plug_clearance_scale)
         r2 = __SMALL_HINGE__PLUG_RADIUS + __SMALL_HINGE__DEFAULT_PLUG_CLEARANCE * plug_clearance_scale);
 }
 
-module rotate_angle(angle, offset)
+module __SMALL_HINGE__rotate_angle(angle, offset)
 {
     translate(-offset) rotate([ 0, 0, -angle ]) translate(offset) children();
 }
 
+module __SMALL_HINGE__bottom(gear_offset, rotate_angle_each_side, plug_clearance_scale, round_far_side,
+                             main_clearance_scale)
+{
+
+    mirror([ 1, 0, 0 ]) difference()
+    {
+
+        union()
+        {
+            gear_h = 10 - __SMALL_HINGE__GEAR_OFFSET_HEIGHT;
+            difference()
+            {
+                __SMALL_HINGE__rotate_angle(rotate_angle_each_side,
+                                            [ -__SMALL_HINGE__THICKNESS / 2, -__SMALL_HINGE__THICKNESS / 2, 0 ])
+                    translate([ 0, 0, 10 ]) mirror([ 0, 0, 1 ])
+                        __SMALL_HINGE__outer_hinge_block(10, gear_offset, false, round_far_side = round_far_side,
+                                                         main_clearance_scale = main_clearance_scale);
+                translate([ 0, 0, 10 ]) mirror([ 0, 0, 1 ])
+                    translate([ -_EPSILON, -_EPSILON, __SMALL_HINGE__GEAR_OFFSET_HEIGHT - _EPSILON ]) cube([
+                        _EPSILON + __SMALL_HINGE__HINGE_SHAVE, __SMALL_HINGE__THICKNESS + 2 * _EPSILON, gear_h +
+                        _EPSILON
+                    ]);
+                translate([ 0, 0, 10 ]) mirror([ 0, 0, 1 ]) translate([ -_EPSILON, -_EPSILON, -_EPSILON ]) cube([
+                    _EPSILON + __SMALL_HINGE__HINGE_SHAVE_BELOW_GEARS * main_clearance_scale,
+                    __SMALL_HINGE__THICKNESS + 2 * _EPSILON, __SMALL_HINGE__GEAR_OFFSET_HEIGHT +
+                    _EPSILON
+                ]);
+            }
+
+            __SMALL_HINGE__rotate_angle(rotate_angle_each_side,
+                                        [ -__SMALL_HINGE__THICKNESS / 2, -__SMALL_HINGE__THICKNESS / 2, 0 ])
+                translate([ 0, 0, 10 ]) mirror([ 0, 0, 1 ])
+                    __SMALL_HINGE__outer_hinge_gears(10, gear_offset, false, round_far_side = round_far_side,
+                                                     main_clearance_scale = main_clearance_scale);
+        }
+
+        __SMALL_HINGE__rotate_angle(rotate_angle_each_side,
+                                    [ -__SMALL_HINGE__THICKNESS / 2, -__SMALL_HINGE__THICKNESS / 2, 0 ])
+            translate([ __SMALL_HINGE__THICKNESS / 2, __SMALL_HINGE__THICKNESS / 2, 10 ])
+                __SMALL_HINGE__port_negative(plug_clearance_scale = plug_clearance_scale);
+    }
+}
+
 module __SMALL_HINGE__half(gear_offset, rotate_angle_each_side, plug_clearance_scale, round_far_side,
-                           main_clearance_scale, shave_middle)
+                           main_clearance_scale)
 {
     difference()
     {
         union()
         {
-            rotate_angle(rotate_angle_each_side, [ -__SMALL_HINGE__THICKNESS / 2, -__SMALL_HINGE__THICKNESS / 2, 0 ])
-                difference()
-            {
-                translate([ 0, 0, 10 ]) mirror([ 0, 0, 1 ]) __SMALL_HINGE__outer_hinge(
-                    10, gear_offset, false, round_far_side = round_far_side,
-                    main_clearance_scale = main_clearance_scale, shave_middle = shave_middle);
-                translate([ __SMALL_HINGE__THICKNESS / 2, __SMALL_HINGE__THICKNESS / 2, 10 ])
-                    __SMALL_HINGE__port_negative(plug_clearance_scale = plug_clearance_scale);
-            }
-
-            rotate_angle(rotate_angle_each_side, [ -__SMALL_HINGE__THICKNESS / 2, -__SMALL_HINGE__THICKNESS / 2, 0 ])
-                difference()
-            {
-                translate([ 0, 0, 20 ]) __SMALL_HINGE__outer_hinge(
-                    10, gear_offset, false, round_far_side = round_far_side,
-                    main_clearance_scale = main_clearance_scale, shave_middle = shave_middle);
-                translate([ __SMALL_HINGE__THICKNESS / 2, __SMALL_HINGE__THICKNESS / 2, 20 ]) mirror([ 0, 0, -1 ])
-                    __SMALL_HINGE__port_negative(plug_clearance_scale = plug_clearance_scale);
-            }
+            __SMALL_HINGE__bottom(gear_offset, rotate_angle_each_side, plug_clearance_scale, round_far_side,
+                                  main_clearance_scale);
+            translate([ 0, 0, 30 ]) mirror([ 0, 0, 1 ]) mirror([ 1, 0, 0 ]) __SMALL_HINGE__bottom(
+                gear_offset, rotate_angle_each_side, plug_clearance_scale, round_far_side, main_clearance_scale);
 
             translate([ __SMALL_HINGE__THICKNESS / 2, __SMALL_HINGE__THICKNESS / 2, 10 ]) __SMALL_HINGE__plug();
 
@@ -153,11 +185,11 @@ module __SMALL_HINGE__half(gear_offset, rotate_angle_each_side, plug_clearance_s
 }
 
 module small_hinge_30mm(rotate_angle_each_side = 0, plug_clearance_scale = 1, main_clearance_scale = 1,
-                        round_far_side = false, shave_middle = true)
+                        round_far_side = false)
 {
     mirror([ 1, 0, 0 ]) __SMALL_HINGE__half(
         360 / 8 / 2, rotate_angle_each_side = rotate_angle_each_side, main_clearance_scale = main_clearance_scale,
-        plug_clearance_scale = plug_clearance_scale, round_far_side = round_far_side, shave_middle=shave_middle);
+        plug_clearance_scale = plug_clearance_scale, round_far_side = round_far_side);
     __SMALL_HINGE__half(0, rotate_angle_each_side = rotate_angle_each_side, main_clearance_scale = main_clearance_scale,
-                        plug_clearance_scale = plug_clearance_scale, round_far_side = round_far_side, shave_middle=shave_middle);
+                        plug_clearance_scale = plug_clearance_scale, round_far_side = round_far_side);
 };
