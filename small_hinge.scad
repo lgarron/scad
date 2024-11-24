@@ -17,7 +17,11 @@ __SMALL_HINGE__PLUG_FRUSTRUM_LENGTH = 2.5;
 __SMALL_HINGE__PLUG_FRUSTRUM_END_RADIUS = 0.3;
 __SMALL_HINGE__PLUG_VERTICAL_CLEARANCE = 0.2;
 
-__SMALL_HINGE__MAX_RADIAL_DIVERGENCE_FACTOR = 0.5;
+// Fraction of the effective gear radius which the gear is outset and inset.
+// This fraction the same by choice of gear design.
+// TODO: this value is supposed to be exact but appears to be off by a few hundredths of a mm. It's not stroke width, so
+// what is it?
+__SMALL_HINGE__MAX_RADIAL_DIVERGENCE_FACTOR = 0.25;
 
 __SMALL_HINGE__GEAR_VERTICAL_CLEARANCE = 0.2; // for 0.2mm layer height
 __SMALL_HINGE__GEAR_OFFSET_HEIGHT = __SMALL_HINGE__PLUG_LENGTH - __SMALL_HINGE__PLUG_FRUSTRUM_LENGTH / 2;
