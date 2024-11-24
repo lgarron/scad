@@ -213,10 +213,17 @@ module __SMALL_HINGE__half(main_thickness, gear_offset, rotate_angle_each_side, 
     }
 
     translate([ main_thickness / 2, main_thickness / 2, 10 + __SMALL_HINGE__PLUG_VERTICAL_CLEARANCE ])
-        cylinder(h = 10 - 2 * __SMALL_HINGE__PLUG_VERTICAL_CLEARANCE, r = main_thickness / 2);
+        cylinder(h = 10 - 2 * __SMALL_HINGE__PLUG_VERTICAL_CLEARANCE,
+                 r = main_thickness / 2 - __SMALL_HINGE__CONNECTOR_OUTSIDE_CLEARANCE);
 
-    translate([ -_EPSILON, main_thickness / 2 - main_thickness / 2, 10 + __SMALL_HINGE__PLUG_VERTICAL_CLEARANCE ]) cube(
-        [ main_thickness / 2 + _EPSILON, main_thickness / 2 * 2, 10 - 2 * __SMALL_HINGE__PLUG_VERTICAL_CLEARANCE ]);
+    translate([
+        -_EPSILON, main_thickness / 2 - main_thickness / 2 + __SMALL_HINGE__CONNECTOR_OUTSIDE_CLEARANCE, 10 +
+        __SMALL_HINGE__PLUG_VERTICAL_CLEARANCE
+    ])
+        cube([
+            main_thickness / 2, main_thickness / 2 * 2 - __SMALL_HINGE__CONNECTOR_OUTSIDE_CLEARANCE * 2, 10 - 2 *
+            __SMALL_HINGE__PLUG_VERTICAL_CLEARANCE
+        ]);
 }
 
 // `extra_degrees`: from 0 to 90
