@@ -182,15 +182,15 @@ module __SMALL_HINGE__bottom(main_thickness, gear_offset, rotate_angle_each_side
 
                     if (shave_end_tangents)
                     {
-#translate([ 0, 0, 10 ]) mirror([ 0, 0, 1 ]) translate([ -_EPSILON, -_EPSILON, -_EPSILON ])
-                        cube([
-                            _EPSILON + (shave_end_tangents ? __SMALL_HINGE__END_TANGENT_SHAVE
-                                                           : (shave_end_tangents ? __SMALL_HINGE__END_TANGENT_SHAVE
-                                                                                 : __SMALL_HINGE__HINGE_SHAVE)) *
-                                           main_clearance_scale,
-                            main_thickness + 2 * _EPSILON, 10 + 2 *
-                            _EPSILON
-                        ]);
+                        translate([ 0, 0, 10 ]) mirror([ 0, 0, 1 ]) translate([ -_EPSILON, -_EPSILON, -_EPSILON ])
+                            cube([
+                                _EPSILON + (shave_end_tangents ? __SMALL_HINGE__END_TANGENT_SHAVE
+                                                               : (shave_end_tangents ? __SMALL_HINGE__END_TANGENT_SHAVE
+                                                                                     : __SMALL_HINGE__HINGE_SHAVE)) *
+                                               main_clearance_scale,
+                                main_thickness + 2 * _EPSILON, 10 + 2 *
+                                _EPSILON
+                            ]);
                     }
                 }
                 translate([ 0, 0, 10 ]) mirror([ 0, 0, 1 ])
