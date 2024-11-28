@@ -224,13 +224,12 @@ module __SMALL_HINGE__bottom(main_thickness, gear_offset, rotate_angle_each_side
                     ]);
             }
 
-            // % __SMALL_HINGE__rotate_angle(main_thickness, rotate_angle_each_side,
-            //                               [ -main_thickness / 2, -main_thickness / 2, 0 ]) translate([ 0, 0, 10
-            //                               ])
-            //         mirror([ 0, 0, 1 ]) __SMALL_HINGE__outer_hinge_gears(
-            //             main_thickness, 10, gear_offset, false, round_far_side = round_far_side,
-            //             main_clearance_scale = main_clearance_scale, extra_degrees = extra_degrees,
-            //             shave_end_tangents = shave_end_tangents);
+            __SMALL_HINGE__rotate_angle(main_thickness, rotate_angle_each_side,
+                                        [ -main_thickness / 2, -main_thickness / 2, 0 ]) translate([ 0, 0, 10 ])
+                mirror([ 0, 0, 1 ]) __SMALL_HINGE__outer_hinge_gears(
+                    main_thickness, 10, gear_offset, false, round_far_side = round_far_side,
+                    main_clearance_scale = main_clearance_scale, extra_degrees = extra_degrees,
+                    shave_end_tangents = shave_end_tangents);
         }
 
         __SMALL_HINGE__rotate_angle(main_thickness, rotate_angle_each_side,
