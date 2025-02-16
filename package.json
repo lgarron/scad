@@ -2,7 +2,7 @@
 	"name": "scad",
 	"type": "module",
 	"version": "0.8.0",
-	"dependencies": {
+	"devDependencies": {
 		"@types/bun": "^1.1.14"
 	},
 	"license": "BSD-2-Clause"
