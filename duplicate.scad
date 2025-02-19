@@ -4,14 +4,18 @@ module duplicate_and_mirror(across = [ 1, 0, 0 ])
     children();
 }
 
-module duplicate_and_translate(translation)
+module duplicate_and_translate(translation, number_of_duplicated_copies = 1)
 {
-    translate(translation) children();
-    children();
+    for (i = [0:(number_of_duplicated_copies - 1)])
+    {
+        translate(translation * i) children();
+    }
 }
 
-module duplicate_and_rotate(rotation)
+module duplicate_and_rotate(rotation, number_of_duplicated_copies = 1)
 {
-    rotate(rotation) children();
-    children();
+    for (i = [0:(number_of_duplicated_copies - 1)])
+    {
+        rotate(rotation * i) children();
+    }
 }
