@@ -6,7 +6,7 @@
 // - "negative"
 // - "positive"
 // - "carving" (carvable - positive)
-module composition_extract(extraction)
+module composition_filter(extraction)
 {
     assert(extraction == "carvable" || extraction == "negative" || extraction == "positive" || extraction == "carving",
            "Invalid value for `extraction` parameter.");
