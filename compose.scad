@@ -9,7 +9,9 @@
 module composition_extract(extraction)
 {
     assert(extraction == "carvable" || extraction == "negative" || extraction == "positive" || extraction == "carving",
-           "Invalid value for `extraction` parameter.") if (extraction == "carving")
+           "Invalid value for `extraction` parameter.");
+
+    if (extraction == "carving")
     {
         difference()
         {
