@@ -36,7 +36,8 @@ module inset_embossed_comp(engraving_depth, margin = undef, epsilon = undef, emb
     // End of parameter default assignments.
 
     negative() color(negative_color) _engraved(engraving_depth, margin = margin, epsilon = epsilon) children();
-    positive() color(positive_color) _engraved(engraving_depth, 0, linear_extrude_height = embossing_height) children();
+    positive() color(positive_color)
+        _engraved(engraving_depth, margin = 0, epsilon = 0, linear_extrude_height = embossing_height) children();
 }
 
 module engraved_comp(engraving_depth, epsilon = undef, negative_color = undef, positive_color = undef)
@@ -72,3 +73,14 @@ module inset_embossed_text_comp(text_string, engraving_depth, embossing_height =
                         negative_color = negative_color, positive_color = positive_color)
         _text_for_engraving(text_string, size = size, font = font, halign = halign, valign = valign);
 }
+
+// $fn = 180;
+
+// compose()
+// {
+//     // carvable() translate([ 0, 0, -50 ]) cube(100, center = true);
+//     // engraved_text_comp("Ubuntu", 0.4);
+//     // inset_embossed_text_comp("Ubuntu", 0.4);
+//     // engraved_comp(0.4) translate([ -10, -10 ]) import("./engravings/engraving.svg", dpi = 25.4);
+//     // inset_embossed_comp(0.4) translate([ -10, -10 ]) import("./engravings/engraving.svg", dpi = 25.4);
+// }
