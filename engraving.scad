@@ -42,9 +42,9 @@ module inset_embossed_comp(engraving_depth, margin = undef, epsilon = undef, emb
 
 module engraved_comp(engraving_depth, epsilon = undef, negative_color = undef, positive_color = undef)
 {
-    composition_extract("negative")
-        inset_embossed_comp(engraving_depth, epsilon = epsilon, margin = 0, negative_color = negative_color,
-                            positive_color = positive_color) children();
+    composition_filter("negative") inset_embossed_comp(engraving_depth, epsilon = epsilon, margin = 0,
+                                                       negative_color = negative_color, positive_color = positive_color)
+        children();
 }
 
 module _text_for_engraving(text_string, size = undef, font = undef, halign = undef, valign = undef)
