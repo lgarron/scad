@@ -14,7 +14,9 @@ module composition_filter(extraction) {
 
   if (extraction == "carving") {
     difference() {
-      children($compose_mode="carvable");
+      union() {
+        children($compose_mode="carvable");
+      }
       children($compose_mode="negative");
     }
   } else {
@@ -26,7 +28,9 @@ module composition_filter(extraction) {
 
 module compose() {
   difference() {
-    children($compose_mode="carvable");
+    union() {
+      children($compose_mode="carvable");
+    }
     children($compose_mode="negative");
   }
   children($compose_mode="positive");
