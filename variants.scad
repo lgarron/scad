@@ -106,7 +106,7 @@ function __variants__variant_parents(variant_entry) = len(variant_entry) > 1 ? v
 
 // function __variants__maybe_get_parameter_for_variant(parameter_name: ParameterName, variant_id: VariantID, variant_ids_in_recursion_stack_for_cycle_detection: VariantID[]): ParameterValue | undef;
 function __variants__maybe_get_parameter_for_variant(parameter_name, variant_id, variant_ids_in_recursion_stack_for_cycle_detection) =
-  echo("__variants__maybe_get_parameter_for_variant", parameter_name, variant_id, variant_ids_in_recursion_stack_for_cycle_detection)
+  // echo("__variants__maybe_get_parameter_for_variant", parameter_name, variant_id, variant_ids_in_recursion_stack_for_cycle_detection)
   assert(is_undef(str_find(variant_id, ".")), "Encountered a variant which contains the period (`.`) character. This character is used to delimit variants, and cannot be part of a variant ID directly")
   assert(!in_list(variant_id, variant_ids_in_recursion_stack_for_cycle_detection), str("Encountered recursively defined variants at the following variant: ", variant_id))
   let (
@@ -118,7 +118,7 @@ function __variants__maybe_get_parameter_for_variant(parameter_name, variant_id,
 
 // function __variants__maybe_get_parameter_for_variants(parameter_name: ParameterName, variants: VariantID[], variant_ids_in_recursion_stack_for_cycle_detection: VariantID[]): ParameterValue | undef;
 function __variants__maybe_get_parameter_for_variants(parameter_name, variant_ids, variant_ids_in_recursion_stack_for_cycle_detection) =
-  echo("__variants__maybe_get_parameter_for_variants", parameter_name, variant_ids, variant_ids_in_recursion_stack_for_cycle_detection)
+  // echo("__variants__maybe_get_parameter_for_variants", parameter_name, variant_ids, variant_ids_in_recursion_stack_for_cycle_detection)
   len(variant_ids) == 0 ? undef
   : (
     let (maybe_value = __variants__maybe_get_parameter_for_variant(parameter_name, last(variant_ids), variant_ids_in_recursion_stack_for_cycle_detection)) is_undef(maybe_value) ? __variants__maybe_get_parameter_for_variants(parameter_name, list_head(variant_ids), variant_ids_in_recursion_stack_for_cycle_detection) : maybe_value
