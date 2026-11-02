@@ -40,12 +40,21 @@ module inset_embossed_comp(
       _engraved(engraving_depth, margin=0, epsilon=0, linear_extrude_height=embossing_height) children();
 }
 
+module engraved_filled_comp(engraving_depth, epsilon = undef, negative_color = undef, positive_color = undef) {
+  inset_embossed_comp(
+    engraving_depth, epsilon=epsilon, margin=0,
+    negative_color=negative_color, positive_color=positive_color
+  )
+    children();
+}
+
 module engraved_comp(engraving_depth, epsilon = undef, negative_color = undef, positive_color = undef) {
-  composition_filter("negative") inset_embossed_comp(
-      engraving_depth, epsilon=epsilon, margin=0,
-      negative_color=negative_color, positive_color=positive_color
-    )
-      children();
+  composition_filter("negative") engraved_filled_comp(
+      engraving_depth=engraving_depth,
+      epsilon=epsilon,
+      negative_color=negative_color,
+      positive_color=positive_color
+    );
 }
 
 module _text_for_engraving(text_string, size = undef, font = undef, halign = undef, valign = undef) {
@@ -70,6 +79,21 @@ module engraved_text_comp(
   positive_color = undef
 ) {
   engraved_comp(engraving_depth, epsilon=epsilon, negative_color=negative_color, positive_color=positive_color)
+    _text_for_engraving(text_string, size=size, font=font, halign=halign, valign=valign);
+}
+
+module engraved_filled_text_comp(
+  text_string,
+  engraving_depth,
+  epsilon = undef,
+  size = undef,
+  font = undef,
+  halign = undef,
+  valign = undef,
+  negative_color = undef,
+  positive_color = undef
+) {
+  engraved_filled_comp(engraving_depth, epsilon=epsilon, negative_color=negative_color, positive_color=positive_color)
     _text_for_engraving(text_string, size=size, font=font, halign=halign, valign=valign);
 }
 
