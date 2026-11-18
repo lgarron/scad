@@ -24,7 +24,7 @@ module conditional_mirror(condition, mirror_by) {
 
 module conditional_front_half(condition) {
   if (condition) {
-    conditional_front_half() children();
+    front_half() children();
   } else {
     children();
   }
