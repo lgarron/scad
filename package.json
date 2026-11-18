@@ -1,7 +1,7 @@
 {
 	"name": "scad",
 	"type": "module",
-	"version": "0.17.3",
+	"version": "0.17.4-dev",
 	"devDependencies": {
 		"@types/bun": "^1.1.14"
 	},
