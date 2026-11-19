@@ -22,6 +22,14 @@ module conditional_mirror(condition, mirror_by) {
   }
 }
 
+module conditional_color(condition, c) {
+  if (condition) {
+    color(c) children();
+  } else {
+    children();
+  }
+}
+
 module conditional_front_half(condition) {
   if (condition) {
     front_half() children();
